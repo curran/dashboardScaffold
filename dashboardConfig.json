@@ -1,5 +1,4 @@
 {
-  "dashboardDivId": "dashboard",
   "layout": {
     "orientation": "vertical",
     "children": [
