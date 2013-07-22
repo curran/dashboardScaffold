@@ -19,13 +19,7 @@ define(['codeMirror', 'inlet', 'd3', './dashboardUtils'],
         dashboard.update();
       }, 100));
 
-      // TODO move this to main
-      //d3.json('dashboardConfig.json', function(config){
-      //});
-      //    dashboardDOM = document.getElementById(dashboardId);
-
       var invalidJSONConfig = {
-        "dashboardDivId": "dashboard",
         "visualizations": {
           "vis": { 
             "color": "red",
@@ -53,7 +47,6 @@ define(['codeMirror', 'inlet', 'd3', './dashboardUtils'],
         codeMirror.on('change', function(){
           var json = codeMirror.getValue();
           try{
-            console.log('here');
             dashboard.setConfig(JSON.parse(json));
           }
           catch(e){

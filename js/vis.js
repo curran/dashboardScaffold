@@ -3,12 +3,12 @@
  * can work within the dashboard layout framework.
  */
 define(['d3'], function(d3){
-  return function(div, options){
+  return function(div){
     var svg = d3.select(div).append('svg')
     var rect = svg.append('rect');
     var label = svg.append('text');
     return {
-      update: function(){
+      update: function(options){
         var s = window.getComputedStyle(div);
         var width  = Math.ceil(parseFloat(s.width));
         var height = Math.ceil(parseFloat(s.height));
@@ -27,7 +27,6 @@ define(['d3'], function(d3){
           .attr('dy', '0.5em')
           .style('font-size', options.fontSize)
           .text(options.text);
-
       }
     }
   }
