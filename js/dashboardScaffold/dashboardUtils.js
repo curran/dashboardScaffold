@@ -11,11 +11,17 @@ define(['d3', 'underscore', './dashboardLayout'],
     return config.visualizations[d.name];
   }
 
-  function updateVis(vis, div, options){
+  function updateVis(vis, div, d){
     var s = window.getComputedStyle(div),
         width  = Math.ceil(parseFloat(s.width)),
         height = Math.ceil(parseFloat(s.height)),
         divContainsVis = div.hasChildNodes() && (div.lastChild === vis.domElement);
+
+    // Alert developers when a vis does not expose a DOM element.
+    if(!vis.domElement){
+      throw Error('The visualization named "'+d.name+
+        '" is missing the required "domElement" property.');
+    }
 
     // This handles the case where a visualization in the layout has been
     // removed, and the existing DOM elements need to be cleared out and have
@@ -27,7 +33,7 @@ define(['d3', 'underscore', './dashboardLayout'],
       div.appendChild(vis.domElement);
     }
 
-    vis.setOptions(options);
+    vis.setOptions(options(d));
     vis.update(width, height);
   }
   return {
@@ -55,8 +61,9 @@ define(['d3', 'underscore', './dashboardLayout'],
           .select(function(d){
             var vis = visualizations[d.name];
             var div = this;
+
             if(vis && (vis != 'loading')){
-              updateVis(vis, div, options(d));
+              updateVis(vis, div, d);
             }
             else{
               visualizations[d.name] = 'loading';
@@ -65,7 +72,7 @@ define(['d3', 'underscore', './dashboardLayout'],
               require([options(d).module], function(visFactory){
                 vis = visFactory();
                 visualizations[d.name] = vis;
-                updateVis(vis, div, options(d));
+                updateVis(vis, div, d);
               });
             }
           });
