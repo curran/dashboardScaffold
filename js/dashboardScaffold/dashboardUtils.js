@@ -33,8 +33,8 @@ define(['d3', 'underscore', './dashboardLayout'],
       div.appendChild(vis.domElement);
     }
 
-    vis.setOptions(options(d));
-    vis.update(width, height);
+    vis.setOptions(options(d), width, height);
+    vis.update();
   }
   return {
     createDashboard: function(dashboardId){

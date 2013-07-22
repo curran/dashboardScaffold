@@ -8,13 +8,15 @@ define(['d3'], function(d3){
     var svg = d3.select(domElement).append('svg');
     var rect = svg.append('rect');
     var label = svg.append('text');
-    var options;
+    var options, width, height;
     return {
       domElement: domElement,
-      setOptions: function(newOptions){
+      setOptions: function(newOptions, newWidth, newHeight){
         options = newOptions;
+        width = newWidth;
+        height = newHeight;
       },
-      update: function(width, height){
+      update: function(){
         rect
           .attr('x', 0)
           .attr('y', 0)
