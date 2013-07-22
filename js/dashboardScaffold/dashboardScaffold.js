@@ -29,6 +29,7 @@ define(['codeMirror', 'inlet', 'd3', './dashboardUtils'],
       var invalidJSONConfig = {
         "visualizations": {
           "vis": { 
+            "module": "vis",
             "color": "red",
             "text": "Invalid JSON",
             "fontSize": "30pt"
@@ -50,8 +51,8 @@ define(['codeMirror', 'inlet', 'd3', './dashboardUtils'],
 
         codeMirror.setOption('value', configJSON);
 
-        configChangeCallback(config);
         dashboard.setConfig(config);
+        configChangeCallback(config);
 
         codeMirror.on('change', function(){
           var json = codeMirror.getValue(), config;
@@ -59,14 +60,15 @@ define(['codeMirror', 'inlet', 'd3', './dashboardUtils'],
             // This line will throw if parsing fails
             config = JSON.parse(json);
 
-            configChangeCallback(config);
             dashboard.setConfig(config);
+            configChangeCallback(config);
           }
           catch(e){
             dashboard.setConfig(invalidJSONConfig);
           }
         });
       });
+      return dashboard;
     }
   };
 });

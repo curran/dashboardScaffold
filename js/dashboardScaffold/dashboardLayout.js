@@ -9,13 +9,25 @@
  *    Determines whether children are place left-right or top-bottom.
  *    Only necessary if 'children' has a value.
  */
-define([], function(){
+define(['underscore'], function(_){
   return function(root, visOptions){
     var leaves = [];
     function hidden(node){
       var options = visOptions[node.name];
       if(options){ return options.hidden; }
-      else{ return false; }
+      else{ return childrenAreHidden(node); }
+    }
+    function childrenAreHidden(node){
+      if(node.children){
+        return _.every(node.children, function(child){
+          var options = visOptions[child.name];
+          if(options){ return options.hidden; }
+          else { return false; }
+        });
+      }
+      else{
+        return false;
+      }
     }
     function innerLayout(node, x, y, dx, dy){
       var totalSize = 0, i, child, childDx, childDy;

@@ -66,14 +66,16 @@ define(['d3', 'underscore', './dashboardLayout'],
               updateVis(vis, div, d);
             }
             else{
-              visualizations[d.name] = 'loading';
+              if(vis != 'loading'){
+                visualizations[d.name] = 'loading';
 
-              // This call loads the JS dynamically
-              require([options(d).module], function(visFactory){
-                vis = visFactory();
-                visualizations[d.name] = vis;
-                updateVis(vis, div, d);
-              });
+                // This call loads the JS dynamically
+                require([options(d).module], function(visFactory){
+                  vis = visFactory();
+                  visualizations[d.name] = vis;
+                  updateVis(vis, div, d);
+                });
+              }
             }
           });
 
