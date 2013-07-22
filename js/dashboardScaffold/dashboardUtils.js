@@ -2,7 +2,7 @@
  * A mini-framework for layout of visualization dashboards.
  *
  * TODO test removing a visualization from the layout
- * (perhaps d3 exit needs to be added to layour divs)
+ * (perhaps d3 exit() needs to be added to layout divs)
  */
 define(['d3', 'underscore', './dashboardLayout'],
     function(d3, _, dashboardLayout){
@@ -10,19 +10,37 @@ define(['d3', 'underscore', './dashboardLayout'],
   function options(d){
     return config.visualizations[d.name];
   }
+
+  function updateVis(vis, div, options){
+    var s = window.getComputedStyle(div),
+        width  = Math.ceil(parseFloat(s.width)),
+        height = Math.ceil(parseFloat(s.height)),
+        divContainsVis = div.hasChildNodes() && (div.lastChild === vis.domElement);
+
+    // This handles the case where a visualization in the layout has been
+    // removed, and the existing DOM elements need to be cleared out and have
+    // the correct visualizations injected into them.
+    if(!divContainsVis){
+      if(div.hasChildNodes()){
+        div.removeChild(div.lastChild);
+      }
+      div.appendChild(vis.domElement);
+    }
+
+    vis.setOptions(options);
+    vis.update(width, height);
+  }
   return {
     createDashboard: function(dashboardId){
       function update(){
-        var visDivs = d3.select('#'+dashboardId).selectAll('.vis')
         // The call to dashboardLayout() computes the (x, y, dx, dy) positions.
-          .data(dashboardLayout(config.layout, config.visualizations));
+        var data = dashboardLayout(config.layout, config.visualizations);
+        var visDivs = d3.select('#'+dashboardId).selectAll('.vis').data(data);
 
         // Enter (creates DOM elements, happens on first call)
         visDivs.enter().append('div')
           .attr('class', 'vis')
-          .style('position', 'absolute')
-          .select(function(d){
-          });
+          .style('position', 'absolute');
 
         // Update (changes DOM element properties, happens each call)
         visDivs
@@ -38,20 +56,21 @@ define(['d3', 'underscore', './dashboardLayout'],
             var vis = visualizations[d.name];
             var div = this;
             if(vis && (vis != 'loading')){
-              vis.setOptions(options(d));
-              vis.update();
+              updateVis(vis, div, options(d));
             }
             else{
               visualizations[d.name] = 'loading';
+
               // This call loads the JS dynamically
               require([options(d).module], function(visFactory){
-                vis = visFactory(div);
+                vis = visFactory();
                 visualizations[d.name] = vis;
-                vis.setOptions(options(d));
-                vis.update();
+                updateVis(vis, div, options(d));
               });
             }
           });
+
+        visDivs.exit().remove();
 
         // Apply CSS styles from the configig file to each visualization div.
         _.each(_.pairs(config.visDivCSS), function(pair){
@@ -71,10 +90,6 @@ define(['d3', 'underscore', './dashboardLayout'],
         },
         setConfig: function(newConfig){
           config = newConfig;
-          // Clear out the DOM so the visualizations are re-initialized
-          // (there may be a memory leak with this approach..)
-          //var visDivs = d3.select('#'+dashboardId).selectAll('.vis')
-          //  .data([]).exit().remove();
           update();
         }
       };

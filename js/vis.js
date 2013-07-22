@@ -3,20 +3,18 @@
  * can work within the dashboard layout framework.
  */
 define(['d3'], function(d3){
-  return function(div){
-    var svg = d3.select(div).append('svg')
+  return function(){
+    var domElement = document.createElement('div');
+    var svg = d3.select(domElement).append('svg');
     var rect = svg.append('rect');
     var label = svg.append('text');
     var options;
     return {
+      domElement: domElement,
       setOptions: function(newOptions){
         options = newOptions;
       },
-      update: function(){
-        var s = window.getComputedStyle(div);
-        var width  = Math.ceil(parseFloat(s.width));
-        var height = Math.ceil(parseFloat(s.height));
-
+      update: function(width, height){
         rect
           .attr('x', 0)
           .attr('y', 0)
