@@ -8,8 +8,15 @@ define(['codeMirror', 'inlet', 'd3', './dashboardUtils'],
      *
      *  * `editorId` The id of the textArea DOM element that should become the configuration editor.
      *  * `dashboardId` The id of the div DOM element that the dashboard will be injected into.
+     *  * `configChangeCallback` a callback function that is called each time the config is updated. The new configuration object is passed to the callback.
      */
-    init: function(editorId, dashboardId){
+    init: function(editorId, dashboardId, configChangeCallback){
+
+      // If no callback was given, use an empty function instead
+      if(!configChangeCallback){
+        configChangeCallback = function(){};
+      }
+
       var editor = document.getElementById(editorId);
 
       var dashboard = dashboardUtils.createDashboard(dashboardId);
@@ -42,12 +49,18 @@ define(['codeMirror', 'inlet', 'd3', './dashboardUtils'],
         var config = JSON.parse(configJSON);
 
         codeMirror.setOption('value', configJSON);
+
+        configChangeCallback(config);
         dashboard.setConfig(config);
 
         codeMirror.on('change', function(){
-          var json = codeMirror.getValue();
+          var json = codeMirror.getValue(), config;
           try{
-            dashboard.setConfig(JSON.parse(json));
+            // This line will throw if parsing fails
+            config = JSON.parse(json);
+
+            configChangeCallback(config);
+            dashboard.setConfig(config);
           }
           catch(e){
             dashboard.setConfig(invalidJSONConfig);

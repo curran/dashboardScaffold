@@ -7,8 +7,12 @@ define(['d3'], function(d3){
     var svg = d3.select(div).append('svg')
     var rect = svg.append('rect');
     var label = svg.append('text');
+    var options;
     return {
-      update: function(options){
+      setOptions: function(newOptions){
+        options = newOptions;
+      },
+      update: function(){
         var s = window.getComputedStyle(div);
         var width  = Math.ceil(parseFloat(s.width));
         var height = Math.ceil(parseFloat(s.height));

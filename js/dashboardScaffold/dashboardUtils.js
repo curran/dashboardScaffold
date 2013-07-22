@@ -38,7 +38,8 @@ define(['d3', 'underscore', './dashboardLayout'],
             var vis = visualizations[d.name];
             var div = this;
             if(vis && (vis != 'loading')){
-              vis.update(options(d));
+              vis.setOptions(options(d));
+              vis.update();
             }
             else{
               visualizations[d.name] = 'loading';
@@ -46,7 +47,8 @@ define(['d3', 'underscore', './dashboardLayout'],
               require([options(d).module], function(visFactory){
                 vis = visFactory(div);
                 visualizations[d.name] = vis;
-                vis.update(options(d));
+                vis.setOptions(options(d));
+                vis.update();
               });
             }
           });
