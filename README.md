@@ -8,9 +8,13 @@ Plumbing for creating dashboards with D3.js. Includes an interactive configurati
 ![An example dashboard](dash.png "Example Dashboard")
 
 # Usage
-Use [Bower](https://github.com/bower/bower):
+
+## Installation
+Use [Bower](https://github.com/bower/bower) to install:
 
 `bower install dashboardScaffold`
+
+## Require.js Configuration
 
 Configure the package and its dependencies  with [Require.js](http://requirejs.org/docs/api.html#packages).
 
@@ -58,6 +62,8 @@ var require = {
     inlet: { exports: 'Inlet' }
   }
 ```
+
+## API
 
 To wire up a `textArea` to be a configuration editor for a dashboard `div`, use the following call:
 
