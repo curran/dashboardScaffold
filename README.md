@@ -3,7 +3,7 @@ dashboardScaffold
 
 Plumbing for creating configurable dashboards with D3.js.
 
-[Try it out!](http://curran.github.io/dashboardScaffold/index.html)
+[Try it out!](http://curran.github.io/dashboardScaffold/example/index.html)
 
 ![An example dashboard](dash.png "Example Dashboard")
 
@@ -16,52 +16,14 @@ Use [Bower](https://github.com/bower/bower) to install:
 
 ## Require.js Configuration
 
-Configure the package and its dependencies  with [Require.js](http://requirejs.org/docs/api.html#packages).
-
-Dependencies:
+Configure the package and its dependencies  with [Require.js](http://requirejs.org/docs/api.html#packages). Dependencies include:
 
  * [D3](d3js.org)
  * [Underscore](http://underscorejs.org/)
  * [CodeMirror](http://codemirror.net/)
  * [Inlet](https://github.com/enjalot/Inlet)
 
-The following configuration uses libraries from [CDNJS](http://cdnjs.com/) and assumes the baseURL is a sibling to the `bower_components` directory. The following code should go in a `requireConfig.js` script loaded into your page right before loading `require.js` (see [index.html](index.html) as an example):
-
-```javascript
-var require = {
-  packages: [
-    {
-      name: 'dashboardScaffold',
-      location: '../bower_components/dashboardScaffold/js/dashboardScaffold/',
-      main: 'dashboardScaffold'
-    }
-  ],
-  paths: {
-    underscore: '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min',
-    backbone: '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min',
-    d3: '//cdnjs.cloudflare.com/ajax/libs/d3/3.1.6/d3.min',
-    // Had to reverse codeMirror and codeMirrorJS in order to get file loading order right
-    codeMirrorJS: '//cdnjs.cloudflare.com/ajax/libs/codemirror/3.12.0/codemirror.min',
-    codeMirror: '//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/javascript',
-    inlet: '../bower_components/dashboardScaffold/lib/inlet.min'
-  },
-  shim: {
-    underscore: { exports: '_' },
-    backbone:{
-      deps: ['underscore'],
-      exports: 'Backbone'
-    },
-    d3: { exports: 'd3' },
-    codeMirror: {
-      deps: ['codeMirrorJS'],
-      exports: 'CodeMirror'
-    },
-    codeMirrorJS: {
-      exports: 'CodeMirror'
-    },
-    inlet: { exports: 'Inlet' }
-  }
-```
+See the [example project Require.js configuration](example/requireConfig.js).
 
 ## API
 
@@ -73,4 +35,17 @@ dashboardScaffold.init('editor', 'dashboard');
 
 Here, "editor" and "dashboard" are the ids of the DOM elements to be used.
 
-The call to `init` will load an initial configuration stored in the file `dashboardConfig.json`.
+## Configuration JSON
+
+The call to `init` will load an initial configuration stored in the file `dashboardConfig.json` in the same directory as `index.html`. Key concepts include:
+
+ * 'layout' A tree structure determining the layout of the dashboard components. Inspired by [D3's hierarchy conventions](https://github.com/mbostock/d3/wiki/Hierarchy-Layout#wiki-hierarchy). Each node in the tree should have the following properties:
+   * 'size' (Number) The size weight of this node.
+   * 'name' (String) The name of this component. Must match a key defined in the 'visualizations' section.
+   * 'children' The nodes that will be nested inside this one. Optional.
+   * 'orientation' (either 'horizontal' or 'vertical') Determines whether children are places left-right or top-bottom. Only necessary if 'children' has a value.
+ * 'visualizations' The configurations for each component in the dashboard.
+   * Keys are arbitrary aliases that are used to reference the component in the 'name' property within layout nodes.
+   * Values must be objects
+     * The 'module' property corresponds to the name of a javascript file that implements the component.
+     * All other properties are passed into the `setOptions()` method of the loaded component implementation (on initialization and on update).
