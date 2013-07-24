@@ -14,7 +14,7 @@ Use [Bower](https://github.com/bower/bower) to install:
 
 `bower install dashboardScaffold`
 
-You can declare dashboardScaffold as a Bower dependency in yout `bower.json` as follows:
+You can declare dashboardScaffold as a Bower dependency in your `bower.json` as follows:
 
 ```javascript
 {
