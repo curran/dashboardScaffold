@@ -14,6 +14,18 @@ Use [Bower](https://github.com/bower/bower) to install:
 
 `bower install dashboardScaffold`
 
+You can declare dashboardScaffold as a Bower dependency in yout `bower.json` as follows:
+
+```javascript
+{
+  "name": "myNeatoProjectThatUsesDashboardScaffold",
+  "version": "0.1.0",
+  "dependencies": {
+    "dashboardScaffold": "git://github.com/curran/dashboardScaffold.git#~0.1.0"
+  }
+}
+```
+
 ## Require.js Configuration
 
 Configure the package and its dependencies  with [Require.js](http://requirejs.org/docs/api.html#packages). Dependencies include:
