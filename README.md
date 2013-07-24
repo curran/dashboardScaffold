@@ -1,7 +1,7 @@
 dashboardScaffold
 =================
 
-Plumbing for creating dashboards with D3.js. Includes an interactive configuration editor.
+Plumbing for creating configurable dashboards with D3.js.
 
 [Try it out!](http://curran.github.io/dashboardScaffold/index.html)
 
@@ -25,7 +25,7 @@ Dependencies:
  * [CodeMirror](http://codemirror.net/)
  * [Inlet](https://github.com/enjalot/Inlet)
 
-The following snippet should go in a `requireConfig.js` script loaded into your page right before loading `require.js` (see [index.html](blob/gh-pages/index.html) as an example):
+The following configuration uses libraries from [CDNJS](http://cdnjs.com/) and assumes the baseURL is a sibling to the `bower_components` directory. The following code should go in a `requireConfig.js` script loaded into your page right before loading `require.js` (see [index.html](blob/gh-pages/index.html) as an example):
 
 ```javascript
 var require = {
@@ -43,7 +43,7 @@ var require = {
     // Had to reverse codeMirror and codeMirrorJS in order to get file loading order right
     codeMirrorJS: '//cdnjs.cloudflare.com/ajax/libs/codemirror/3.12.0/codemirror.min',
     codeMirror: '//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/javascript',
-    inlet: 'lib/inlet.min'
+    inlet: '../bower_components/dashboardScaffold/lib/inlet.min'
   },
   shim: {
     underscore: { exports: '_' },
@@ -72,3 +72,5 @@ dashboardScaffold.init('editor', 'dashboard');
 ```
 
 Here, "editor" and "dashboard" are the ids of the DOM elements to be used.
+
+The call to `init` will load an initial configuration stored in the file `dashboardConfig.json`.
