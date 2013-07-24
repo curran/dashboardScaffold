@@ -1,0 +1,45 @@
+{
+  "layout": {
+    "orientation": "vertical",
+    "children": [
+      {
+        "orientation": "horizontal",
+        "size": 1,
+        "children": [
+          {
+            "orientation": "vertical",
+            "size": 1,
+            "children": [
+              { "name": "vis1",  "size": 3 },
+              { "name": "vis2", "size": 1 }
+            ]
+          },
+          { "name": "vis3", "size": 1 }
+        ]
+      },
+      { "name": "vis4", "size": 0.28 }
+    ]
+  },
+  "visualizations": {
+    "vis1": {
+      "module": "vis",
+      "color": "#AC1A65"
+    },
+    "vis2": {
+      "module": "vis",
+      "color": "#1AAC43"
+    },
+    "vis3": {
+      "module": "vis",
+      "color": "#FFB802"
+    },
+    "vis4": {
+      "module": "vis",
+      "color": "#2A268A"
+    }
+  }, 
+  "visDivCSS": {
+    "border-style": "solid",
+    "border-width": "2px"
+  }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8 />
+  <title>Dashboard Scaffold Example</title>
+  <link rel="stylesheet" href="lib/inlet.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.12.0/codemirror.min.css">
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    #editorContainer {
+      position: fixed;
+      top: 0%;
+      left: 0%;
+      width: 40%;
+      height: 100%;
+    }
+    #dashboard {
+      position: fixed;
+      top: 0%;
+      left: 40%;
+      width: 60%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="editorContainer">
+    <textarea id="editor"></textarea>
+  </div>
+  <div id="dashboard"></div>
+  <script src='requireConfig.js'></script>
+  <script data-main="js/main.js" src='//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js'></script>
+</body>
+</html>
