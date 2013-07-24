@@ -7,6 +7,8 @@ Plumbing for creating configurable dashboards with D3.js.
 
 ![An example dashboard](dash.png "Example Dashboard")
 
+When you click on a color or number in the configurator on the left, an interactive editor (color chooser or slider) pops up. When you manipulate the configuration, it is propagated through the dashboard layout to the component visualizations instantly.
+
 # Usage
 
 ## Installation
