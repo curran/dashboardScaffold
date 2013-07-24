@@ -25,7 +25,7 @@ Dependencies:
  * [CodeMirror](http://codemirror.net/)
  * [Inlet](https://github.com/enjalot/Inlet)
 
-The following configuration uses libraries from [CDNJS](http://cdnjs.com/) and assumes the baseURL is a sibling to the `bower_components` directory. The following code should go in a `requireConfig.js` script loaded into your page right before loading `require.js` (see [index.html](blob/gh-pages/index.html) as an example):
+The following configuration uses libraries from [CDNJS](http://cdnjs.com/) and assumes the baseURL is a sibling to the `bower_components` directory. The following code should go in a `requireConfig.js` script loaded into your page right before loading `require.js` (see [index.html](index.html) as an example):
 
 ```javascript
 var require = {
