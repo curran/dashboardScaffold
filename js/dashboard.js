@@ -1,8 +1,5 @@
 /**
  * A mini-framework for layout of visualization dashboards.
- *
- * TODO test removing a visualization from the layout
- * (perhaps d3 exit() needs to be added to layout divs)
  */
 define(['d3', 'underscore', './layout'],
     function(d3, _, layout){
@@ -36,6 +33,10 @@ define(['d3', 'underscore', './layout'],
     vis.setOptions(options(d), width, height);
     vis.update();
   }
+  function hidden(d){
+    return config.visualizations[d.name].hidden;
+  }
+
   return {
     createDashboard: function(dashboardId){
       function update(){
@@ -53,10 +54,16 @@ define(['d3', 'underscore', './layout'],
           .style('top',    function(d){ return d.y+'%'; })
           .style('left',   function(d){ return d.x+'%'; })
           .style('width',  function(d){ return d.dx+'%'; })
-          .style('height', function(d){ return d.dy+'%'; })
+          .style('height', function(d){
+            // Return 0 height when hidden in order to prevent 
+            // brush interactions from changing the cursor
+            if(hidden(d))
+              return 0;
+            else
+              return d.dy+'%';
+          })
           .style('visibility', function(d){
-            var hidden = config.visualizations[d.name].hidden;
-            return hidden ? 'hidden' : 'visible'
+            return hidden(d) ? 'hidden' : 'visible'
           })
           .select(function(d){
             var vis = visualizations[d.name];
