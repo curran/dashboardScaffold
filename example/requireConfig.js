@@ -8,6 +8,7 @@ var require = {
     }
   ],
   paths: {
+    getterSetters: '../../js/getterSetters',
     underscore: '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min',
     backbone: '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min',
     d3: '//cdnjs.cloudflare.com/ajax/libs/d3/3.1.6/d3.min',

@@ -2,7 +2,7 @@
  * A dummy visualization to show how D3 visualizations
  * can work within the dashboard layout framework.
  */
-define(['d3', 'underscore'], function(d3, _){
+define(['d3', 'underscore', 'getterSetters'], function(d3, _, getterSetters){
   return function(){
     var div = document.createElement('div'),
         options = {
@@ -72,7 +72,7 @@ define(['d3', 'underscore'], function(d3, _){
       updateLabel();
     }
     
-    getterSetters({
+    _.extend(my, getterSetters({
       width: my,
       height: my,
       bkgColor: updateRect,
@@ -80,19 +80,7 @@ define(['d3', 'underscore'], function(d3, _){
       lineWidth: updateLines,
       labelText: updateLabel,
       labelSize: updateLabel
-    });
-
-    function getterSetters(map){
-      _.each(_.keys(map), function(property){
-        var callback = map[property];
-        my[property] = function(value){
-          if (!arguments.length) return options[property];
-          options[property] = value;
-          if(callback){ callback(); }
-          return my;
-        };
-      });
-    }
+    }, options));
 
     return {
       domElement: div,
