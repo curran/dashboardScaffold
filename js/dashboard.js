@@ -10,15 +10,16 @@ define(['d3', 'underscore', './layout'],
     return config.visualizations[d.name];
   }
 
-  console.log("here");
-
   function updateVis(vis, div, d){
     var s = window.getComputedStyle(div),
-        width  = Math.ceil(parseFloat(s.width)),
-        height = Math.ceil(parseFloat(s.height)),
+        borderWidth = parseInt(s.borderWidth),
+        width  = Math.ceil(parseFloat(s.width)) - borderWidth,
+        height = Math.ceil(parseFloat(s.height)) - borderWidth,
         size = {width: width, height: height},
         options = _.extend(getOptions(d), size),
         divContainsVis = div.hasChildNodes() && (div.lastChild === vis.domElement);
+    console.log(s.borderWidth);
+    console.log(s.width);
 
     // Alert developers when a vis does not expose a DOM element.
     if(!vis.domElement){
