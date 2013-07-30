@@ -17,25 +17,29 @@
           { "name": "vis3", "size": 1 }
         ]
       },
-      { "name": "vis4", "size": 0.28 }
+      { "name": "vis4", "size": 0.3 }
     ]
   },
   "visualizations": {
     "vis1": {
       "module": "vis",
-      "color": "#AC1A65"
+      "bkgColor": "#AC1A65",
+      "lineWidth":22,
+      "lineColor":"#861750"
     },
     "vis2": {
       "module": "vis",
-      "color": "#1AAC43"
+      "bkgColor": "#A2FFBC",
+      "lineColor":"#F5F5F5",
+      "labelText": "Hello dashboardConfig!"
     },
     "vis3": {
       "module": "vis",
-      "color": "#FFB802"
+      "bkgColor": "#FFB802"
     },
     "vis4": {
       "module": "vis",
-      "color": "#2A268A"
+      "lineWidth":50
     }
   }, 
   "visDivCSS": {

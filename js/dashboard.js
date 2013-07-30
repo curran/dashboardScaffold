@@ -4,7 +4,9 @@
 define(['d3', 'underscore', './layout'],
     function(d3, _, layout){
   var config, visualizations = {};
-  function options(d){
+
+  // Gets the options for a given visualization
+  function getOptions(d){
     return config.visualizations[d.name];
   }
 
@@ -12,6 +14,8 @@ define(['d3', 'underscore', './layout'],
     var s = window.getComputedStyle(div),
         width  = Math.ceil(parseFloat(s.width)),
         height = Math.ceil(parseFloat(s.height)),
+        size = {width: width, height: height},
+        options = _.extend(getOptions(d), size),
         divContainsVis = div.hasChildNodes() && (div.lastChild === vis.domElement);
 
     // Alert developers when a vis does not expose a DOM element.
@@ -30,9 +34,27 @@ define(['d3', 'underscore', './layout'],
       div.appendChild(vis.domElement);
     }
 
-    vis.setOptions(options(d), width, height);
-    vis.update();
+    setOptions(vis, options);
   }
+
+  // Calls setters to set changed options.
+  // No calls are made for unchanged options.
+  function setOptions(vis, options){
+    var chart = vis.chart,
+        keysToConsider = _.intersection(
+          _.keys(options), _.keys(chart)
+        ),
+        keysToSet = _.filter(keysToConsider, function(key){
+          // use stringify to account for nested objects
+          var newValue = JSON.stringify(options[key]),
+              oldValue = JSON.stringify(chart[key]());
+          return newValue != oldValue;
+        });
+    _.each(keysToSet, function(key){
+      chart[key](options[key]);
+    });
+  }
+
   function hidden(d){
     return config.visualizations[d.name].hidden;
   }
@@ -77,7 +99,7 @@ define(['d3', 'underscore', './layout'],
                 visualizations[d.name] = 'loading';
 
                 // This call loads the JS dynamically
-                require([options(d).module], function(visFactory){
+                require([getOptions(d).module], function(visFactory){
                   vis = visFactory();
                   visualizations[d.name] = vis;
                   updateVis(vis, div, d);
