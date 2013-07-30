@@ -27,19 +27,23 @@ define(['codeMirror', 'inlet', 'd3', './dashboard'],
       }, 100));
 
       var invalidJSONConfig = {
-        "visualizations": {
-          "vis": { 
-            "module": "vis",
-            "color": "red",
-            "text": "Invalid JSON",
-            "fontSize": "30pt"
-          }
-        },
         "layout": {
           "orientation": "vertical",
           "children": [ { "name": "vis", "size": 1 } ]
         },
-        "visDivCSS": { "border-style": "solid", "border-width": "2px" }
+        "visualizations": {
+          "vis": {
+            "module": "vis",
+            "bkgColor": "red",
+            "lineColor": "red",
+            "labelText": "Invalid JSON",
+            "labelSize": "41pt"
+          }
+        },
+        "visDivCSS": {
+          "border-style": "solid",
+          "border-width": "2px"
+        }
       };
 
       var codeMirror = CodeMirror.fromTextArea(editor);

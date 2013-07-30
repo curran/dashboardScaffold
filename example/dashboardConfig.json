@@ -25,11 +25,11 @@
       "module": "vis",
       "bkgColor": "#AC1A65",
       "lineWidth":22,
-      "lineColor":"#861750"
+      "lineColor":"#47FF00"
     },
     "vis2": {
       "module": "vis",
-      "bkgColor": "#A2FFBC",
+      "bkgColor": "#69FFED",
       "lineColor":"#F5F5F5",
       "labelText": "Hello dashboardConfig!"
     },

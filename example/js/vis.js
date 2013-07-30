@@ -9,7 +9,7 @@ define(['d3', 'underscore'], function(d3, _){
           bkgColor: '#005E47',
           lineColor: '#000000',
           lineWidth: 5,
-          fontSize: '20px',
+          labelSize: '20px',
           labelText: '',
           width: 0,
           height: 0
@@ -60,7 +60,7 @@ define(['d3', 'underscore'], function(d3, _){
         .attr('y', options.height / 2)
         .attr('text-anchor', 'middle')
         .attr('dy', '0.5em')
-        .style('font-size', options.fontSize)
+        .style('font-size', options.labelSize)
         .text(options.labelText);
     }, 0);
 
@@ -78,7 +78,8 @@ define(['d3', 'underscore'], function(d3, _){
       bkgColor: updateRect,
       lineColor: updateLines,
       lineWidth: updateLines,
-      labelText: updateLabel
+      labelText: updateLabel,
+      labelSize: updateLabel
     });
 
     function getterSetters(map){
