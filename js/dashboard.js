@@ -10,6 +10,8 @@ define(['d3', 'underscore', './layout'],
     return config.visualizations[d.name];
   }
 
+  console.log("here");
+
   function updateVis(vis, div, d){
     var s = window.getComputedStyle(div),
         width  = Math.ceil(parseFloat(s.width)),

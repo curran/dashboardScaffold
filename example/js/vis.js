@@ -18,6 +18,8 @@ define(['d3', 'underscore', 'getterSetters'], function(d3, _, getterSetters){
     function svg(){
       var svg = d3.select(div).selectAll('svg').data([1]);
       svg.enter().append('svg');
+      svg.attr('width', options.width)
+         .attr('height', options.height);
       return svg;
     }
 
