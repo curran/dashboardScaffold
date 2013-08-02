@@ -27,7 +27,7 @@ define(['d3', 'underscore', 'getterSetters'], function(d3, _, getterSetters){
       var r = Math.round(Math.random() * 255),
           g = Math.round(Math.random() * 255),
           b = Math.round(Math.random() * 255);
-      return 'rgb('+r+','+g+','+b+')';
+      return d3.rgb(r, g, b).toString();
     }
 
     var updateRect = _.debounce(function(){

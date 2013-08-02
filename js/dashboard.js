@@ -26,7 +26,8 @@ define(['d3', 'underscore', 'backbone', './layout'],
   }
 
   function updateVis(vis, div, d){
-    var options = _.extend(getOptions(d), getSize(div)),
+    var options = getOptions(d),
+        size = getSize(div),
         divContainsVis = div.hasChildNodes() && (div.lastChild === vis.domElement);
 
     // Alert developers when a vis does not expose a DOM element.
@@ -45,6 +46,7 @@ define(['d3', 'underscore', 'backbone', './layout'],
       div.appendChild(vis.domElement);
     }
 
+    setOptions(vis, size);
     setOptions(vis, options);
   }
 
@@ -52,16 +54,14 @@ define(['d3', 'underscore', 'backbone', './layout'],
   // No calls are made for unchanged options.
   function setOptions(vis, options){
     var chart = vis.chart,
-        keysToConsider = _.intersection(
-          _.keys(options), _.keys(chart)
-        ),
-        keysToSet = _.filter(keysToConsider, function(key){
-          // use stringify to account for nested objects
-          var newValue = JSON.stringify(options[key]),
-              oldValue = JSON.stringify(chart[key]());
-          return newValue != oldValue;
-        });
-    _.each(keysToSet, function(key){
+        keys = _.intersection(_.keys(options), _.keys(chart));
+    keys = _(keys).filter(function(key){
+      // use stringify to account for nested objects
+      var newValue = JSON.stringify(options[key]),
+          oldValue = JSON.stringify(chart[key]());
+      return newValue != oldValue;
+    });
+    _.each(keys, function(key){
       chart[key](options[key]);
     });
   }
@@ -139,9 +139,11 @@ define(['d3', 'underscore', 'backbone', './layout'],
         _.each(_.pairs(chart), function(pair){
           var property = pair[0],
               getterSetter = pair[1];
-          getterSetter.on('change', function(value){
-            setOption(name, property, value);
-          });
+          if(property != 'width' && property != 'height'){
+            getterSetter.on('change', function(value){
+              setOption(name, property, value);
+            });
+          }
         });
       }
 
