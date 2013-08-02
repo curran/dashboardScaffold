@@ -23,10 +23,20 @@ define(['d3', 'underscore', 'getterSetters'], function(d3, _, getterSetters){
       return svg;
     }
 
+    function randomColor(){
+      var r = Math.round(Math.random() * 255),
+          g = Math.round(Math.random() * 255),
+          b = Math.round(Math.random() * 255);
+      return 'rgb('+r+','+g+','+b+')';
+    }
+
     var updateRect = _.debounce(function(){
       console.log('in updateRect');
       var rect = svg().selectAll('rect').data([1]);
-      rect.enter().append('rect');
+      rect.enter().append('rect')
+        .on('click', function(){
+          my.bkgColor(randomColor());
+        });
       rect
         .attr('x', 0)
         .attr('y', 0) 
@@ -42,15 +52,37 @@ define(['d3', 'underscore', 'getterSetters'], function(d3, _, getterSetters){
           lines = svg().selectAll('line').data([
             {x1: 0, y1: 0, x2: w, y2: h},
             {x1: 0, y1: h, x2: w, y2: 0}
-          ]);
-      lines.enter().append('line');
+          ]),
+          x1,
+          width1,
+          drag = d3.behavior.drag()
+            .on('dragstart', function(d){
+              x1 = d3.event.sourceEvent.pageX;
+            })
+            .on('drag', function(d){
+              var x2 = d3.event.sourceEvent.pageX,
+                  newLineWidth = my.lineWidth() + x2 - x1;
+              newLineWidth = newLineWidth < 1 ? 1 : newLineWidth;
+              my.lineWidth(newLineWidth);
+              x1 = x2
+            });
+
+      lines.enter().append('line')
+        .on('click', function(){
+          my.lineColor(randomColor());
+        });
+
+
+
+
       lines
         .attr('x1', function(d){ return d.x1; })
         .attr('y1', function(d){ return d.y1; })
         .attr('x2', function(d){ return d.x2; })
         .attr('y2', function(d){ return d.y2; })
         .style('stroke', options.lineColor)
-        .style('stroke-width', options.lineWidth);
+        .style('stroke-width', options.lineWidth)
+        .call(drag);
     }, 0);
 
     var updateLabel = _.debounce(function(){
@@ -74,15 +106,15 @@ define(['d3', 'underscore', 'getterSetters'], function(d3, _, getterSetters){
       updateLabel();
     }
     
-    _.extend(my, getterSetters({
-      width: my,
-      height: my,
-      bkgColor: updateRect,
-      lineColor: updateLines,
-      lineWidth: updateLines,
-      labelText: updateLabel,
-      labelSize: updateLabel
-    }, options));
+    _.extend(my, getterSetters(options));
+
+    my.width.on('change', my);
+    my.height.on('change', my);
+    my.bkgColor.on('change', updateRect);
+    my.lineColor.on('change', updateLines);
+    my.lineWidth.on('change', updateLines);
+    my.labelText.on('change', updateLabel);
+    my.labelSize.on('change', updateLabel);
 
     return {
       domElement: div,

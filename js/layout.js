@@ -22,7 +22,8 @@ define(['underscore'], function(_){
       }
     }
     function innerLayout(node, x, y, dx, dy){
-      var totalSize = 0, i, child, childDx, childDy;
+      var totalSize = 0, i, child,
+          childX, childY, childDx, childDy;
       for(i = 0; i < node.children.length; i++){
         child = node.children[i];
         if(!hidden(child)){
@@ -34,26 +35,32 @@ define(['underscore'], function(_){
         if(!hidden(child)){
           if(node.orientation == 'horizontal'){
             childDx = dx * child.size / totalSize;
-            child.x = x;
-            child.y = y;
-            child.dx = childDx;
-            child.dy = dy;
+            childX = x;
+            childY = y;
+            childDx = childDx;
+            childDy = dy;
             x += childDx;
           }
           else if(node.orientation == 'vertical'){
             childDy = dy * child.size / totalSize;
-            child.x = x;
-            child.y = y;
-            child.dx = dx;
-            child.dy = childDy;
+            childX = x;
+            childY = y;
+            childDx = dx;
+            childDy = childDy;
             y += childDy;
           }
         }
         if(child.children){
-          innerLayout(child, child.x, child.y, child.dx, child.dy);
+          innerLayout(child, childX, childY, childDx, childDy);
         }
         else{
-          leaves.push(child);
+          leaves.push({
+            d: child,
+            x: childX,
+            y: childY,
+            dx: childDx,
+            dy: childDy
+          });
         }
       }
     }

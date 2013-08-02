@@ -8,20 +8,12 @@ define(['codeMirror', 'inlet', 'd3', './dashboard'],
      *
      *  * `editorId` The id of the textArea DOM element that should become the configuration editor.
      *  * `dashboardId` The id of the div DOM element that the dashboard will be injected into.
-     *  * `configChangeCallback` a callback function that is called each time the config is updated. The new configuration object is passed to the callback.
      */
-    init: function(editorId, dashboardId, configChangeCallback){
-
-      // If no callback was given, use an empty function instead
-      if(!configChangeCallback){
-        configChangeCallback = function(){};
-      }
-
+    init: function(editorId, dashboardId){
       var editor = document.getElementById(editorId);
-
+      var codeMirror = CodeMirror.fromTextArea(editor);
       var dashboard = Dashboard.createDashboard(dashboardId);
 
-      // TODO move this to main
       window.addEventListener('resize', _.debounce(function(){
         dashboard.update();
       }, 100));
@@ -46,29 +38,31 @@ define(['codeMirror', 'inlet', 'd3', './dashboard'],
         }
       };
 
-      var codeMirror = CodeMirror.fromTextArea(editor);
       Inlet(codeMirror);
       codeMirror.setOption('mode', 'javascript');
       codeMirror.setSize('100%', '100%');
       d3.text('dashboardConfig.json', function(configJSON){
-        var config = JSON.parse(configJSON);
+        // A flag to prevent redundantly resetting the
+        // text every time the use changes it.
+        var settingConfig = false;
 
         codeMirror.setOption('value', configJSON);
-
-        dashboard.setConfig(config);
-        configChangeCallback(config);
+        dashboard.setConfig(JSON.parse(configJSON));
 
         codeMirror.on('change', function(){
-          var json = codeMirror.getValue(), config;
+          settingConfig = true;
           try{
             // This line will throw if parsing fails
-            config = JSON.parse(json);
-
-            dashboard.setConfig(config);
-            configChangeCallback(config);
+            dashboard.setConfig(JSON.parse(codeMirror.getValue()));
           }
           catch(e){
             dashboard.setConfig(invalidJSONConfig);
+          }
+          settingConfig = false;
+        });
+        dashboard.on('configChanged', function(config){
+          if(!settingConfig){
+            codeMirror.setOption('value', JSON.stringify(config, null, 2));
           }
         });
       });
