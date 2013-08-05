@@ -14,10 +14,10 @@
               { "name": "vis2", "size": 1 }
             ]
           },
-          { "name": "vis3", "size": 1 }
+          { "name": "map", "size": 2 }
         ]
       },
-      { "name": "vis4", "size": 0.3 }
+      { "name": "vis3", "size": 0.3 }
     ]
   },
   "visualizations": {
@@ -37,9 +37,10 @@
       "module": "vis",
       "bkgColor": "#FFB802"
     },
-    "vis4": {
-      "module": "vis",
-      "lineWidth":50
+    "map": {
+      "module": "map",
+      "tileProvider":"Stamen.Toner",
+      "tryThis_tileProvider":"OpenStreetMap.Mapnik"
     }
   }, 
   "visDivCSS": {
