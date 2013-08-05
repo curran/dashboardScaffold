@@ -58,11 +58,13 @@ define(['codeMirror', 'inlet', 'd3', 'underscore', './dashboard'], function (Cod
                         // This line will throw if parsing fails
                         dashboard.setConfig(JSON.parse(codeMirror.getValue()));
                     } catch (e) {
+                        console.log("settingErrorJSON");
                         dashboard.setConfig(invalidJSONConfig);
                     }
                     settingConfig = false;
                 });
                 dashboard.on('configChanged', function (config) {
+                    console.log("changed "+settingConfig);
                     if (!settingConfig) {
                         codeMirror.setOption('value', JSON.stringify(config, null, 2));
                     }

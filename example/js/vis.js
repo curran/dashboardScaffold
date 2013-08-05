@@ -9,8 +9,7 @@ define(['d3', 'underscore', 'getterSetters'], function (d3, _, getterSetters) {
     "use strict";
     return function () {
         var div = document.createElement('div'),
-            my,
-            options = {
+            my = getterSetters({
                 bkgColor: '#005E47',
                 lineColor: '#000000',
                 lineWidth: 5,
@@ -18,13 +17,10 @@ define(['d3', 'underscore', 'getterSetters'], function (d3, _, getterSetters) {
                 labelText: '',
                 width: 0,
                 height: 0
-            },
+            }),
             svg = function () {
                 var theSVG = d3.select(div).selectAll('svg').data([1]);
                 theSVG.enter().append('svg');
-                theSVG
-                    .attr('width', options.width)
-                    .attr('height', options.height);
                 return theSVG;
             },
             randomColor = function () {
@@ -42,14 +38,14 @@ define(['d3', 'underscore', 'getterSetters'], function (d3, _, getterSetters) {
                     });
                 rect.attr('x', 0)
                     .attr('y', 0)
-                    .attr('width', options.width)
-                    .attr('height', options.height)
-                    .attr('fill', options.bkgColor);
+                    .attr('width', my.width())
+                    .attr('height', my.height())
+                    .attr('fill', my.bkgColor());
             }, 0),
             updateLines = _.debounce(function () {
                 console.log('in updateLines');
-                var w = options.width,
-                    h = options.height,
+                var w = my.width(),
+                    h = my.height(),
                     lines = svg().selectAll('line').data([
                         {x1: 0, y1: 0, x2: w, y2: h},
                         {x1: 0, y1: h, x2: w, y2: 0}
@@ -78,34 +74,33 @@ define(['d3', 'underscore', 'getterSetters'], function (d3, _, getterSetters) {
                     .attr('y1', function (d) { return d.y1; })
                     .attr('x2', function (d) { return d.x2; })
                     .attr('y2', function (d) { return d.y2; })
-                    .style('stroke', options.lineColor)
-                    .style('stroke-width', options.lineWidth)
+                    .style('stroke', my.lineColor())
+                    .style('stroke-width', my.lineWidth())
                     .call(drag);
             }, 0),
             updateLabel = _.debounce(function () {
                 var label = svg().selectAll('text').data([1]);
                 label.enter().append('text');
                 label
-                    .attr('x', options.width / 2)
-                    .attr('y', options.height / 2)
+                    .attr('x', my.width() / 2)
+                    .attr('y', my.height() / 2)
                     .attr('text-anchor', 'middle')
                     .attr('dy', '0.5em')
-                    .style('font-size', options.labelSize)
-                    .text(options.labelText);
+                    .style('font-size', my.labelSize())
+                    .text(my.labelText());
                 console.log('in updateLabel');
+            }, 0),
+            updateSize = _.debounce(function () {
+                console.log('in updateSize');
+                svg().attr('width', my.width())
+                    .attr('height', my.height());
+                updateRect();
+                updateLines();
+                updateLabel();
             }, 0);
 
-        // See http://bost.ocks.org/mike/chart/
-        my = function () {
-            console.log('in my');
-            updateRect();
-            updateLines();
-            updateLabel();
-        };
-        _.extend(my, getterSetters(options));
-
-        my.width.on('change', my);
-        my.height.on('change', my);
+        my.width.on('change', updateSize);
+        my.height.on('change', updateSize);
         my.bkgColor.on('change', updateRect);
         my.lineColor.on('change', updateLines);
         my.lineWidth.on('change', updateLines);

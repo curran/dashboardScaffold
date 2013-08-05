@@ -135,8 +135,8 @@ define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, 
                                 require([getOptions(d).module], function (visFactory) {
                                     vis = visFactory();
                                     visualizations[d.name] = vis;
-                                    listenForChanges(d.name, vis.chart);
                                     updateVis(vis, div, d);
+                                    listenForChanges(d.name, vis.chart);
                                 });
                             }
                         }

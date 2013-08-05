@@ -11,11 +11,17 @@
  * of the setter-getter function pattern.
  *
  * In addition to this pattern, the functions emit change events.
- * To listen, use `theFunction.on('change', function (newValue) { ... });`
+ * To listen, use:
+ *   `theFunction.on('change', function (newValue) { ... });`
+ *
+ * The getter-setter pattern with change events enables a
+ * data flow pattern to be implemented. This means that
+ * a property can be "piped" into another property or function.
+ * This is implemented in `getterSetters.connect()`.
  */
 define(['underscore', 'backbone'], function (_, Backbone) {
     "use strict";
-    return function (options) {
+    function getterSetters (options) {
         var my = {};
         _.each(_.keys(options), function (property) {
             var fn = function (value) {
@@ -30,5 +36,15 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             my[property] = fn;
         });
         return my;
-    };
+    }
+
+    getterSetters.connect = function (property, fn) {
+        // Call the function once to initialize the value
+        fn(property());
+
+        // Call the function when the property changes
+        property.on('change', fn);
+    }
+
+    return getterSetters;
 });
