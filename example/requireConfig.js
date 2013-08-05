@@ -15,6 +15,7 @@
        * can be used independently of it:
        */
       getterSetters: dashboardScaffoldDir+'/getterSetters',
+      loadCSS: dashboardScaffoldDir+'/loadCSS',
 
       /**
        * Third party libs:
