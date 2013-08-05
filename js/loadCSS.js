@@ -1,3 +1,5 @@
+/*global define, document */
+
 /**
  * A module for dynamically loading CSS files.
  *
@@ -9,12 +11,13 @@
  * It also saves developers the hassle of manually synchronizing HTML 
  * with loaded modules, which can become a pain as the application scales.
  */
-define([], function(){
-  return function(url){
-    var link = document.createElement("link");
-    link.type = "text/css";
-    link.rel = "stylesheet";
-    link.href = url;
-    document.getElementsByTagName("head")[0].appendChild(link);
-  }
+define([], function () {
+    "use strict";
+    return function (url) {
+        var link = document.createElement("link");
+        link.type = "text/css";
+        link.rel = "stylesheet";
+        link.href = url;
+        document.getElementsByTagName("head")[0].appendChild(link);
+    };
 });
