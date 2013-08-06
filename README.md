@@ -1,10 +1,13 @@
 dashboardScaffold
 =================
 
-Plumbing for creating configurable dashboards with D3.js.
+Plumbing for creating configurable visualization dashboards with D3.js.
 
 ![An example dashboard](http://farm6.staticflickr.com/5532/9449466691_6c55d58033_z.jpg "Example Dashboard")
-Check out the [example project!](https://github.com/curran/dashboardScaffoldExample).
+
+Check out the [example project](https://github.com/curran/dashboardScaffoldExample).
+
+[Try it out!](http://curran.github.io/dashboardScaffoldExample/index.html)
 
 Features include:
 
