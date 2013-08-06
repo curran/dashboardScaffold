@@ -1,5 +1,9 @@
 {
   "name": "dashboardScaffold",
-  "version": "0.1.0",
-  "main": "js/dashboardScaffold/dashboardScaffold.js"
+  "version": "0.1.1",
+  "main": "dashboardScaffold/main.js",
+  "ignore": [
+    ".git",
+    "README.md"
+  ]
 }

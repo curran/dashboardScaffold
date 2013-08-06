@@ -5,9 +5,9 @@ Plumbing for creating configurable dashboards with D3.js.
 
 [Try it out!](http://curran.github.io/dashboardScaffold/example/index.html)
 
-![An example dashboard](dash.png "Example Dashboard")
+![An example dashboard](http://farm6.staticflickr.com/5532/9449466691_6c55d58033_z.jpg "Example Dashboard")
 
-When you click on a color or number in the configurator on the left, an interactive editor (color chooser or slider) pops up. When you manipulate the configuration, it is propagated through the dashboard layout to the component visualizations instantly.
+When you click on a color or number in the configurator on the left, an interactive editor (color chooser or slider) pops up. When you manipulate the configuration, it is propagated through the dashboard layout to the component visualizations instantly. When you edit properties of the visualizations through their own UI interactions, the configuration JSON is instantly updated.
 
 # Usage
 
