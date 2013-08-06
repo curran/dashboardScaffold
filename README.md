@@ -23,8 +23,27 @@ In addition, the following standalone [AMD](http://requirejs.org/docs/whyamd.htm
 
 # Usage
 
-## Installation
-Use [Bower](https://github.com/bower/bower) to install:
+## Require.js Configuration
+
+Configure the package and its dependencies  with [Require.js](http://requirejs.org/docs/api.html#packages). Dependencies include:
+
+ * [D3](d3js.org)
+ * [Underscore](http://underscorejs.org/)
+ * [Backbone](http://backbonejs.org/)
+ * [CodeMirror](http://codemirror.net/)
+ * [Inlet](https://github.com/enjalot/Inlet)
+
+See the [Require.js configuration file in the example project](https://github.com/curran/dashboardScaffoldExample/blob/gh-pages/requireConfig.js) for a working configuration.
+
+You can configure Require.js to use the modules hosted with GitHub Pages:
+
+ * `var dashboardScaffoldDir = 'http://curran.github.io/dashboardScaffold/v0.1.1';`
+
+If you use Bower, you can configure Require.js to use the installed modules:
+
+ * `var dashboardScaffoldDir = '../bower_components/dashboardScaffold';`
+
+## Installation with [Bower](https://github.com/bower/bower)
 
 `bower install dashboardScaffold`
 
@@ -39,20 +58,6 @@ You can declare dashboardScaffold as a Bower dependency in your `bower.json` as 
   }
 }
 ```
-
-## Require.js Configuration
-
-Configure the package and its dependencies  with [Require.js](http://requirejs.org/docs/api.html#packages). Dependencies include:
-
- * [D3](d3js.org)
- * [Underscore](http://underscorejs.org/)
- * [Backbone](http://backbonejs.org/)
- * [CodeMirror](http://codemirror.net/)
- * [Inlet](https://github.com/enjalot/Inlet)
-
-See the [Require.js configuration file in the example project](https://github.com/curran/dashboardScaffoldExample/blob/gh-pages/requireConfig.js) for a working configuration.
-
-You can configure Require.js to use the modules installed in bower_components, or if you prefer not to use Bower you can use a version hosted with GitHub Pages, e.g. `http://curran.github.io/dashboardScaffold/v0.1.1`.
 
 ## API
 
