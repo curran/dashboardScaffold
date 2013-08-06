@@ -3,11 +3,20 @@ dashboardScaffold
 
 Plumbing for creating configurable dashboards with D3.js.
 
-[Try it out!](http://curran.github.io/dashboardScaffold/example/index.html)
-
 ![An example dashboard](http://farm6.staticflickr.com/5532/9449466691_6c55d58033_z.jpg "Example Dashboard")
+Check out the [example project!](https://github.com/curran/dashboardScaffoldExample).
 
-When you click on a color or number in the configurator on the left, an interactive editor (color chooser or slider) pops up. When you manipulate the configuration, it is propagated through the dashboard layout to the component visualizations instantly. When you edit properties of the visualizations through their own UI interactions, the configuration JSON is instantly updated.
+Features include:
+
+ * A nested box layout using D3.js and CSS to position divs
+ * A system that synchronizes visualization dashboards with a JSON-based configuration
+ * An editor system that uses CodeMirror and Inlet to dynamically configure visualization dashboards
+
+In addition, the following standalone [AMD](http://requirejs.org/docs/whyamd.html) modules are included:
+
+ * `getterSetters` A module that generates getter-setter functions (in the style of [Mike Bostock's Toward Reusable Charts](http://bost.ocks.org/mike/chart/)). The generated functions also emit 'change' events when changed (using [Backbone Events](http://backbonejs.org/#Events).
+   * `getterSetters.connect(a, b)` provides a simple API for assembling data flow networks based on the getter-setter-with-events pattern. This can be used to create visualization dashboards with multiple linked views.
+ * `loadCSS` A module that dynamically loads CSS files into the page (inspired by the [Require.js advice on loading CSS](http://requirejs.org/docs/faq-advanced.html#css).
 
 # Usage
 
@@ -16,14 +25,14 @@ Use [Bower](https://github.com/bower/bower) to install:
 
 `bower install dashboardScaffold`
 
-You can declare dashboardScaffold as a Bower dependency in your `bower.json` as follows:
+You can declare dashboardScaffold as a Bower dependency in your `bower.json` as follows (this file wil be automatically created and filled in if you run `bower init`):
 
 ```javascript
 {
   "name": "myNeatoProjectThatUsesDashboardScaffold",
   "version": "0.1.0",
   "dependencies": {
-    "dashboardScaffold": "git://github.com/curran/dashboardScaffold.git#~0.1.0"
+    "dashboardScaffold": "git://github.com/curran/dashboardScaffold.git#~0.1.1"
   }
 }
 ```
@@ -34,10 +43,11 @@ Configure the package and its dependencies  with [Require.js](http://requirejs.o
 
  * [D3](d3js.org)
  * [Underscore](http://underscorejs.org/)
+ * [Backbone](http://backbonejs.org/)
  * [CodeMirror](http://codemirror.net/)
  * [Inlet](https://github.com/enjalot/Inlet)
 
-See the [example project Require.js configuration](example/requireConfig.js).
+See the Require.js configuration file in the [example project](https://github.com/curran/dashboardScaffoldExample) for a working configuration.
 
 ## API
 
@@ -61,5 +71,5 @@ The call to `init` will load an initial configuration stored in the file `dashbo
  * 'visualizations' The configurations for each component in the dashboard.
    * Keys are arbitrary aliases that are used to reference the component in the 'name' property within layout nodes.
    * Values must be objects
-     * The 'module' property corresponds to the name of a javascript file that implements the component.
-     * All other properties are passed into the `setOptions()` method of the loaded component implementation (on initialization and on update).
+     * The 'module' property corresponds to the name of a javascript file (more precicely, the name of the AMD module) that implements the component.
+     * All other options are passed into the component by calling its corresponding setter-getter functions (on initialization and on update).
