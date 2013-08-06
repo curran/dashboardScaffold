@@ -50,7 +50,9 @@ Configure the package and its dependencies  with [Require.js](http://requirejs.o
  * [CodeMirror](http://codemirror.net/)
  * [Inlet](https://github.com/enjalot/Inlet)
 
-See the Require.js configuration file in the [example project](https://github.com/curran/dashboardScaffoldExample) for a working configuration.
+See the [Require.js configuration file in the example project](https://github.com/curran/dashboardScaffoldExample/blob/gh-pages/requireConfig.js) for a working configuration.
+
+You can configure Require.js to use the modules installed in bower_components, or if you prefer not to use Bower you can use a version hosted with GitHub Pages, e.g. `http://curran.github.io/dashboardScaffold/v0.1.1`.
 
 ## API
 
