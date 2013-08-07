@@ -39,10 +39,11 @@ define(['underscore', 'backbone'], function (_, Backbone) {
     }
 
     getterSetters.connect = function (property, fn) {
-        // Call the function once to initialize the value
+        // Call the function once to initialize the value.
         fn(property());
 
-        // Call the function when the property changes
+        // Call the function when the property changes.
+        // The new property value is passed as an argument to fn.
         property.on('change', fn);
     }
 
