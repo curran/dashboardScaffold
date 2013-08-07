@@ -33,6 +33,8 @@ define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, 
     function setOptions(vis, options) {
         var chart = vis.chart,
             keys = _.intersection(_.keys(options), _.keys(chart));
+
+            //console.log("setting "+key+" : "+options[key]);
         keys = _(keys).filter(function (key) {
             // use stringify to account for nested objects
             var newValue = JSON.stringify(options[key]),
@@ -44,28 +46,32 @@ define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, 
         });
     }
 
-    function updateVis(vis, div, d) {
-        var options = getOptions(d),
-            size = getSize(div),
+    function updateVis(vis, div, options) {
+        var size, divContainsVis; 
+
+        if(div){
+            size = getSize(div);
             divContainsVis = div.hasChildNodes() && (div.lastChild === vis.domElement);
 
-        // Alert developers when a vis does not expose a DOM element.
-        if (!vis.domElement) {
-            throw new Error('The visualization named "' + d.name +
-                '" is missing the required "domElement" property.');
-        }
-
-        // This handles the case where a visualization in the layout has been
-        // removed, and the existing DOM elements need to be cleared out and have
-        // the correct visualizations injected into them.
-        if (!divContainsVis) {
-            if (div.hasChildNodes()) {
-                div.removeChild(div.lastChild);
+            // Alert developers when a vis does not expose a DOM element.
+            if (!vis.domElement) {
+                throw new Error('The visualization with options "' +
+                    JSON.stringify(options) +
+                    '" was placed in the dashboard layout, but is missing' +
+                    'the required "domElement" property.');
             }
-            div.appendChild(vis.domElement);
+            
+            // This handles the case where a visualization in the layout has been
+            // removed, and the existing DOM elements need to be cleared out and have
+            // the correct visualizations injected into them.
+            if (!divContainsVis) {
+                if (div.hasChildNodes()) {
+                    div.removeChild(div.lastChild);
+                }
+                div.appendChild(vis.domElement);
+            }
+            setOptions(vis, size);
         }
-
-        setOptions(vis, size);
         setOptions(vis, options);
     }
 
@@ -126,7 +132,7 @@ define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, 
                         d = d.d; //unpack the inner component from the layout
 
                         if (vis && (vis !== 'loading')) {
-                            updateVis(vis, div, d);
+                            updateVis(vis, div, getOptions(d));
                         } else {
                             if (vis !== 'loading') {
                                 visualizations[d.name] = 'loading';
@@ -135,7 +141,7 @@ define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, 
                                 require([getOptions(d).module], function (visFactory) {
                                     vis = visFactory();
                                     visualizations[d.name] = vis;
-                                    updateVis(vis, div, d);
+                                    updateVis(vis, div, getOptions(d));
                                     listenForChanges(d.name, vis.chart);
                                 });
                             }
@@ -144,9 +150,33 @@ define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, 
 
                 visDivs.exit().remove();
 
-                // Apply CSS styles from the configig file to each visualization div.
+                // Apply CSS styles from the confige to each visualization div.
                 _.each(_.pairs(config.visDivCSS), function (pair) {
                     visDivs.style(pair[0], pair[1]);
+                });
+
+                // Initialize the components that are not in the layout
+                _.each(_.pairs(config.visualizations), function (pair) {
+                    var name = pair[0],
+                        options = pair[1],
+                        vis = visualizations[name];
+
+                    if(!vis){
+                        visualizations[name] = 'loading';
+
+                        // This call loads the JS dynamically
+                        require([options.module], function (visFactory) {
+                            vis = visFactory();
+                            visualizations[name] = vis;
+                            updateVis(vis, null, options);
+                            listenForChanges(name, vis.chart);
+                        });
+                    } else {
+                        // update components not in the layout
+                        if (options.invisible) {
+                            updateVis(vis, null, options);
+                        }
+                    }
                 });
             }
 
