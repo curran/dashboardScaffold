@@ -4,7 +4,7 @@
 /**
  * A mini-framework for layout of visualization dashboards.
  */
-define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, layout) {
+define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, Backbone, async, layout) {
     "use strict";
     var config, visualizations = {};
 
@@ -139,7 +139,7 @@ define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, 
 
                                 // This call loads the JS dynamically
                                 require([getOptions(d).module], function (visFactory) {
-                                    vis = visFactory();
+                                    vis = visFactory(getVisualization);
                                     visualizations[d.name] = vis;
                                     updateVis(vis, div, getOptions(d));
                                     listenForChanges(d.name, vis.chart);
@@ -166,7 +166,7 @@ define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, 
 
                         // This call loads the JS dynamically
                         require([options.module], function (visFactory) {
-                            vis = visFactory();
+                            vis = visFactory(getVisualization);
                             visualizations[name] = vis;
                             updateVis(vis, null, options);
                             listenForChanges(name, vis.chart);
@@ -178,6 +178,16 @@ define(['d3', 'underscore', 'backbone', './layout'], function (d3, _, Backbone, 
                         }
                     }
                 });
+            }
+
+            // This function is passed into visualization factories
+            // inorder to give them access to the other visualizations.
+            function getVisualization(name, callback /*(vis)*/) {
+                async.whilst(
+                    function () { return visualizations[name] === 'loading'; },
+                    function (checkAgain) { setTimeout(checkAgain, 100); },
+                    function () { callback(visualizations[name]); }
+                );
             }
 
             // Call update() once to initialize the layout
