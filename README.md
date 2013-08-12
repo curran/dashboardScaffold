@@ -7,7 +7,7 @@ Plumbing for creating configurable visualization dashboards with D3.js.
 
 Check out the [example project](https://github.com/curran/dashboardScaffoldExample).
 
-[Try it out!](http://curran.github.io/dashboardScaffoldExample/index.html)
+[Try it out!](http://curran.github.io/dashboardScaffoldExample/v0.1.0/index.html)
 
 Features include:
 
