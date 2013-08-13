@@ -21,7 +21,7 @@
  */
 define(['underscore', 'backbone'], function (_, Backbone) {
     "use strict";
-    function getterSetters (options) {
+    function getterSetters(options) {
         var my = {};
         _.each(_.keys(options), function (property) {
             var fn = function (value) {
@@ -45,7 +45,7 @@ define(['underscore', 'backbone'], function (_, Backbone) {
         // Call the function when the property changes.
         // The new property value is passed as an argument to fn.
         property.on('change', fn);
-    }
+    };
 
     return getterSetters;
 });

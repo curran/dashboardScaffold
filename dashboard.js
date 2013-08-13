@@ -47,9 +47,9 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
     }
 
     function updateVis(vis, div, options) {
-        var size, divContainsVis; 
+        var size, divContainsVis;
 
-        if(div){
+        if (div) {
             size = getSize(div);
             divContainsVis = div.hasChildNodes() && (div.lastChild === vis.domElement);
 
@@ -60,7 +60,7 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                     '" was placed in the dashboard layout, but is missing' +
                     'the required "domElement" property.');
             }
-            
+
             // This handles the case where a visualization in the layout has been
             // removed, and the existing DOM elements need to be cleared out and have
             // the correct visualizations injected into them.
@@ -97,6 +97,17 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                         });
                     }
                 });
+            }
+
+            // This function is passed into visualization factories
+            // inorder to give them access to the other visualizations.
+            // callback(vis) where vis has vis.chart and vis.domElement
+            function getVisualization(name, callback) {
+                async.whilst(
+                    function () { return visualizations[name] === 'loading'; },
+                    function (checkAgain) { setTimeout(checkAgain, 100); },
+                    function () { callback(visualizations[name]); }
+                );
             }
 
             function update() {
@@ -161,7 +172,7 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                         options = pair[1],
                         vis = visualizations[name];
 
-                    if(!vis){
+                    if (!vis) {
                         visualizations[name] = 'loading';
 
                         // This call loads the JS dynamically
@@ -178,16 +189,6 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                         }
                     }
                 });
-            }
-
-            // This function is passed into visualization factories
-            // inorder to give them access to the other visualizations.
-            function getVisualization(name, callback /*(vis)*/) {
-                async.whilst(
-                    function () { return visualizations[name] === 'loading'; },
-                    function (checkAgain) { setTimeout(checkAgain, 100); },
-                    function () { callback(visualizations[name]); }
-                );
             }
 
             // Call update() once to initialize the layout

@@ -4,15 +4,7 @@ define(['codeMirror', 'inlet', 'd3', 'underscore', './dashboard'], function (Cod
 
     "use strict";
 
-    function init (config, dashboardId, editorId) {
-        var dashboard = Dashboard.createDashboard(dashboardId),
-            editor = document.getElementById(editorId);
-        if (editor) { initEditor(config, dashboard, editor); }
-        dashboard.setConfig(config);
-        return dashboard;
-    }
-
-    function initEditor(config, dashboard, editor){
+    function initEditor(config, dashboard, editor) {
         var codeMirror = CodeMirror.fromTextArea(editor),
             settingConfig = false,
             invalidJSONConfig = {
@@ -53,6 +45,14 @@ define(['codeMirror', 'inlet', 'd3', 'underscore', './dashboard'], function (Cod
                 codeMirror.setOption('value', JSON.stringify(config, null, 2));
             }
         });
+    }
+
+    function init(config, dashboardId, editorId) {
+        var dashboard = Dashboard.createDashboard(dashboardId),
+            editor = document.getElementById(editorId);
+        if (editor) { initEditor(config, dashboard, editor); }
+        dashboard.setConfig(config);
+        return dashboard;
     }
 
     return {
