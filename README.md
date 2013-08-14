@@ -83,3 +83,5 @@ The call to `init` will load an initial configuration stored in the file `dashbo
    * Values must be objects
      * The 'module' property corresponds to the name of a javascript file (more precicely, the name of the AMD module) that implements the component.
      * All other options are passed into the component by calling its corresponding setter-getter functions (on initialization and on update).
+
+This project is released under the [MIT License](http://opensource.org/licenses/MIT).

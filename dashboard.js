@@ -76,7 +76,8 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
     }
 
     return {
-        createDashboard: function (dashboardId) {
+        createDashboard: function (dashboardId, visModulePath) {
+            console.log(visModulePath);
             var dashboard;
 
             // Sets an option for a given visualization in the config
@@ -95,6 +96,11 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                         getterSetter.on('change', function (value) {
                             setOption(name, property, value);
                         });
+                    }
+                    if (property === 'hidden') {
+                        // recompute the layout when visualizations
+                        // are shown or hidden
+                        getterSetter.on('change', update);
                     }
                 });
             }
@@ -149,7 +155,7 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                                 visualizations[d.name] = 'loading';
 
                                 // This call loads the JS dynamically
-                                require([getOptions(d).module], function (visFactory) {
+                                require([visModulePath + getOptions(d).module], function (visFactory) {
                                     vis = visFactory(getVisualization);
                                     visualizations[d.name] = vis;
                                     updateVis(vis, div, getOptions(d));
@@ -176,7 +182,7 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                         visualizations[name] = 'loading';
 
                         // This call loads the JS dynamically
-                        require([options.module], function (visFactory) {
+                        require([visModulePath + options.module], function (visFactory) {
                             vis = visFactory(getVisualization);
                             visualizations[name] = vis;
                             updateVis(vis, null, options);
@@ -205,7 +211,8 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                 setConfig: function (newConfig) {
                     config = newConfig;
                     update();
-                }
+                },
+                getVisualization: getVisualization
             };
             _.extend(dashboard, Backbone.Events);
             return dashboard;
