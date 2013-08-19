@@ -76,8 +76,7 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
     }
 
     return {
-        createDashboard: function (dashboardId, visModulePath) {
-            console.log(visModulePath);
+        createDashboard: function (dashboardId, getModule) {
             var dashboard;
 
             // Sets an option for a given visualization in the config
@@ -110,7 +109,7 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
             // callback(vis) where vis has vis.chart and vis.domElement
             function getVisualization(name, callback) {
                 async.whilst(
-                    function () { return visualizations[name] === 'loading'; },
+                    function () { return !visualizations[name]; },
                     function (checkAgain) { setTimeout(checkAgain, 100); },
                     function () { callback(visualizations[name]); }
                 );
@@ -154,8 +153,7 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                             if (vis !== 'loading') {
                                 visualizations[d.name] = 'loading';
 
-                                // This call loads the JS dynamically
-                                require([visModulePath + getOptions(d).module], function (visFactory) {
+                                getModule(getOptions(d).module, function (visFactory) {
                                     vis = visFactory(getVisualization);
                                     visualizations[d.name] = vis;
                                     updateVis(vis, div, getOptions(d));
@@ -182,7 +180,7 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                         visualizations[name] = 'loading';
 
                         // This call loads the JS dynamically
-                        require([visModulePath + options.module], function (visFactory) {
+                        getModule(options.module, function (visFactory) {
                             vis = visFactory(getVisualization);
                             visualizations[name] = vis;
                             updateVis(vis, null, options);

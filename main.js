@@ -3,7 +3,6 @@
 define(['codeMirror', 'inlet', 'd3', 'underscore', './dashboard'], function (CodeMirror, inlet, d3, _, Dashboard) {
 
     "use strict";
-    var visModulePath = "ingressMap/";
 
     function initEditor(config, dashboard, editor) {
         var codeMirror = CodeMirror.fromTextArea(editor),
@@ -48,8 +47,8 @@ define(['codeMirror', 'inlet', 'd3', 'underscore', './dashboard'], function (Cod
         });
     }
 
-    function init(config, dashboardId, editorId) {
-        var dashboard = Dashboard.createDashboard(dashboardId, visModulePath),
+    function init(config, getModule, dashboardId, editorId) {
+        var dashboard = Dashboard.createDashboard(dashboardId, getModule),
             editor = document.getElementById(editorId);
         if (editor) { initEditor(config, dashboard, editor); }
         dashboard.setConfig(config);
