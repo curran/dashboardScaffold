@@ -1,4 +1,4 @@
-/*global define, window */
+/*global define, window, listenForChanges */
 /*jslint nomen: true */ // this causes JSLint to tolerate "_"
 
 /**
@@ -21,10 +21,13 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
 
     // Gets the CSS-computed size of a given div
     function getSize(div) {
-        var s = window.getComputedStyle(div),
-            borderWidth = parseInt(s.borderWidth, 10),
-            width  = Math.ceil(parseFloat(s.width)) - borderWidth,
-            height = Math.ceil(parseFloat(s.height)) - borderWidth;
+        //var s = window.getComputedStyle(div),
+        //    borderWidth = parseInt(s.borderWidth, 10),
+        //    width  = Math.ceil(parseFloat(s.width)) - borderWidth,
+        //    height = Math.ceil(parseFloat(s.height)) - borderWidth;
+        //console.log();
+        var width  = div.clientWidth,
+            height = div.clientHeight;
         return {width: width, height: height};
     }
 
@@ -85,23 +88,6 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                 config.visualizations[name][property] = value;
                 dashboard.trigger('configChanged', config);
                 // Trigger event that resets CodeMirror Text to serialized JSON
-            }
-
-            function listenForChanges(name, chart) {
-                _.each(_.pairs(chart), function (pair) {
-                    var property = pair[0],
-                        getterSetter = pair[1];
-                    if (property !== 'width' && property !== 'height') {
-                        getterSetter.on('change', function (value) {
-                            setOption(name, property, value);
-                        });
-                    }
-                    if (property === 'hidden') {
-                        // recompute the layout when visualizations
-                        // are shown or hidden
-                        getterSetter.on('change', update);
-                    }
-                });
             }
 
             // This function is passed into visualization factories
@@ -191,6 +177,23 @@ define(['d3', 'underscore', 'backbone', 'async', './layout'], function (d3, _, B
                         if (options.invisible) {
                             updateVis(vis, null, options);
                         }
+                    }
+                });
+            }
+
+            function listenForChanges(name, chart) {
+                _.each(_.pairs(chart), function (pair) {
+                    var property = pair[0],
+                        getterSetter = pair[1];
+                    if (property !== 'width' && property !== 'height') {
+                        getterSetter.on('change', function (value) {
+                            setOption(name, property, value);
+                        });
+                    }
+                    if (property === 'hidden') {
+                        // recompute the layout when visualizations
+                        // are shown or hidden
+                        getterSetter.on('change', update);
                     }
                 });
             }
